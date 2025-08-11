@@ -1,36 +1,10 @@
-/*
-    Laboratorio No. 3 - Recursive Descent Parsing
-    CC4 - Compiladores
-    En este archivo ustedes tienen que crear un lexer que sea capaz de reconocer
-    los tokens de la siguiente gramática:
-    S ::= E;
-    E ::= E + E
-        | E - E
-        | E * E
-        | E / E
-        | E % E
-        | E ^ E
-        | - E
-        | (E)
-        | number
-    **** Cosas Importantes ****:
-    1. Lo que está en minúscula son terminales
-    2. Lo que está en mayúscula son no terminales
-    3. number son números double de java que siguen el siguiente formato:
-        signo   = [+-]
-        digitos = [0-9]
-        punto = .
-        exponente = [eE]
-        (digitos)+((punto)?(digitos)*)?((exponente)(signo)?(digitos)+)?
-        donde '+' es uno o más veces
-        donde '*' es cero o más veces
-        donde '?' es cero o una vez
-    4. Cuando hacemos match con un token devolvemos un objeto de tipo Token
-        4.1 Ver clase Token
-        4.2 Si encuentran un numero el constructor que tienen que usar es:
-            Token(id, val)
-        4.3 En la clase token hay constantes que definen el id de cada token
-*/
+/******************************************************************************
+ * Nombre             : Maria Claudia Lainfiesta Herrera
+ * Carnet             : 24000149
+ * Curso              : Ciencias de la Computacion IV
+ * 
+ * Este archivo forma parte de: Laboratorio No.3(RDP).
+ *****************************************************************************/
 import java.io.StringReader;
 import java.io.IOException;
 
@@ -261,24 +235,23 @@ public class Lexer {
 		/* 11 */ YY_NO_ANCHOR,
 		/* 12 */ YY_NO_ANCHOR,
 		/* 13 */ YY_NO_ANCHOR,
-		/* 14 */ YY_NOT_ACCEPT,
-		/* 15 */ YY_NO_ANCHOR,
+		/* 14 */ YY_NO_ANCHOR,
+		/* 15 */ YY_NOT_ACCEPT,
 		/* 16 */ YY_NO_ANCHOR,
 		/* 17 */ YY_NO_ANCHOR,
 		/* 18 */ YY_NOT_ACCEPT,
-		/* 19 */ YY_NO_ANCHOR,
-		/* 20 */ YY_NOT_ACCEPT
+		/* 19 */ YY_NO_ANCHOR
 	};
 	private int yy_cmap[] = unpackFromString(1,130,
-"15:9,14:2,15:2,0,15:18,9,15:4,5,15:2,7,8,4,2,15,3,11,15,10:10,15,1,15:9,12," +
-"15:24,6,15:6,12,15:24,13,15,16:2")[0];
+"15:9,14:2,15:2,0,15:18,14,15:4,9,15:2,11,12,7,6,15,4,2,8,1:10,15,5,15:9,3,1" +
+"5:24,10,15:6,3,15:24,13,15,16:2")[0];
 
-	private int yy_rmap[] = unpackFromString(1,21,
-"0,1:8,2,3,4,2,1,4,1,5,1,6,7:2")[0];
+	private int yy_rmap[] = unpackFromString(1,20,
+"0,1,2,3:12,4,5,3,6:2")[0];
 
-	private int yy_nxt[][] = unpackFromString(8,17,
-"-1,1,2,3,4,5,6,7,8,9,10,11,17,12,15,17,13,-1:27,10,14,-1:15,10,16,18,-1:14," +
-"16,-1:16,16,-1,18,-1:6,20:2,-1:6,19,-1:16,19,-1:6");
+	private int yy_nxt[][] = unpackFromString(7,17,
+"-1,1,2,17,3,4,5,6,7,8,9,10,11,12,13,17,14,-1,1,16,15,-1:14,16,-1:33,19,-1:2" +
+",18,-1,18,-1:11,16,-1,15,-1:14,19,-1:15");
 
 	public Token nextToken ()
 		throws java.io.IOException {
@@ -325,11 +298,12 @@ public class Lexer {
 					yy_to_mark();
 					switch (yy_last_accept_state) {
 					case 1:
-						{ return new Token(Token.SEMI);   }
+						{ return new Token(Token.NUMBER, yytext());   }
 					case -2:
 						break;
 					case 2:
-						{ return new Token(Token.PLUS);   }
+						{ return new Token(Token.ERROR);
+                             /* todo lo demas es ERROR */   }
 					case -3:
 						break;
 					case 3:
@@ -337,36 +311,35 @@ public class Lexer {
 					case -4:
 						break;
 					case 4:
-						{ return new Token(Token.MULT);   }
+						{ return new Token(Token.SEMI);   }
 					case -5:
 						break;
 					case 5:
-						{ return new Token(Token.MOD);   }
+						{ return new Token(Token.PLUS);   }
 					case -6:
 						break;
 					case 6:
-						{ return new Token(Token.EXP);   }
+						{ return new Token(Token.MULT);   }
 					case -7:
 						break;
 					case 7:
-						{ return new Token(Token.LPAREN);   }
+						{ return new Token(Token.DIV);   }
 					case -8:
 						break;
 					case 8:
-						{ return new Token(Token.RPAREN);   }
+						{ return new Token(Token.MOD);   }
 					case -9:
 						break;
 					case 9:
-						{ /* NO HACER NADA */             }
+						{ return new Token(Token.EXP);   }
 					case -10:
 						break;
 					case 10:
-						{ return new Token(Token.NUMBER, yytext()); }
+						{ return new Token(Token.LPAREN);   }
 					case -11:
 						break;
 					case 11:
-						{ return new Token(Token.ERROR);
-                      /* todo lo demas es ERROR */ }
+						{ return new Token(Token.RPAREN);   }
 					case -12:
 						break;
 					case 12:
@@ -374,24 +347,24 @@ public class Lexer {
 					case -13:
 						break;
 					case 13:
-						
+						{ /* NO HACER NADA */   }
 					case -14:
 						break;
-					case 15:
-						{ /* NO HACER NADA */             }
+					case 14:
+						
 					case -15:
 						break;
 					case 16:
-						{ return new Token(Token.NUMBER, yytext()); }
+						{ return new Token(Token.NUMBER, yytext());   }
 					case -16:
 						break;
 					case 17:
 						{ return new Token(Token.ERROR);
-                      /* todo lo demas es ERROR */ }
+                             /* todo lo demas es ERROR */   }
 					case -17:
 						break;
 					case 19:
-						{ return new Token(Token.NUMBER, yytext()); }
+						{ return new Token(Token.NUMBER, yytext());   }
 					case -18:
 						break;
 					default:
